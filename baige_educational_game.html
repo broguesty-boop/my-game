@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baige - English Antonyms Educational Game</title>
+    <!-- Tailwind CSS for modern responsive layout scaffolding -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ==========================================================================
+           KAZAKH NATIONAL AESTHETICS & CUSTOM CSS STYLING
+           Adjust colors, fonts, and ornamental frames below.
+           ========================================================================== */
+        :root {
+            --color-turquoise: #0d9488;
+            --color-emerald: #059669;
+            --color-gold: #d97706;
+            --color-gold-light: #f59e0b;
+            --color-cream: #fef3c7;
+            --color-crimson: #991b1b;
+            --color-dark: #1e293b;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Kazakh Ornamental Border Simulation using CSS gradients & patterns */
+        .kazakh-border {
+            border: 4px solid var(--color-gold);
+            position: relative;
+            box-shadow: 0 0 25px rgba(217, 119, 6, 0.3);
+        }
+        
+        .kazakh-border::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 2px dashed rgba(217, 119, 6, 0.5);
+            pointer-events: none;
+        }
+
+        .kazakh-btn {
+            background: linear-gradient(135deg, var(--color-gold), #b45309);
+            border: 2px solid #fef3c7;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+        }
+
+        .kazakh-btn:hover {
+            background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+        }
+
+        .kazakh-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Racetrack styling */
+        .racetrack {
+            background: linear-gradient(90deg, #134e4a 0%, #065f46 50%, #047857 100%);
+            border-top: 3px solid var(--color-gold);
+            border-bottom: 3px solid var(--color-gold);
+            position: relative;
+        }
+
+        .lane {
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.2);
+            position: relative;
+            height: 90px;
+        }
+
+        .finish-line {
+            position: absolute;
+            right: 10%;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: repeating-linear-gradient(
+                0deg,
+                #fff,
+                #fff 10px,
+                #1e293b 10px,
+                #1e293b 20px
+            );
+            z-index: 10;
+        }
+
+        .horse-icon {
+            transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: absolute;
+            top: 10px;
+            z-index: 20;
+        }
+
+        /* Pulsing animation for active team indicators */
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(217, 119, 6, 0); }
+        }
+        .active-team-pulse {
+            animation: pulse-gold 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-6">
+
+    <!-- HEADER / TITLE SECTION -->
+    <header class="w-full max-w-5xl text-center mb-4">
+        <div class="kazakh-border bg-slate-900/90 rounded-2xl p-4 md:p-6 shadow-2xl">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl md:text-4xl">🐎</span>
+                    <div class="text-left">
+                        <h1 class="text-3xl md:text-5xl font-extrabold tracking-wider text-amber-400 font-serif">BAIGE</h1>
+                        <p class="text-xs md:text-sm text-teal-300 font-medium">Traditional Kazakh Antonym Horse Race</p>
+                    </div>
+                </div>
+                
+                <!-- Audio Controls (Placeholder for kui.mp3) -->
+                <div class="flex items-center gap-3 bg-slate-800 p-2 rounded-xl border border-amber-500/40">
+                    <button id="audioToggleBtn" onclick="toggleAudio()" class="kazakh-btn px-4 py-2 rounded-lg text-xs flex items-center gap-2">
+                        <span>🎵</span> <span id="audioBtnText">Play Kui Music</span>
+                    </button>
+                    <!-- Background Audio Element: Replace src="kui.mp3" with your custom music file -->
+                    <audio id="bgMusic" loop preload="auto">
+                        <source src="kui.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main class="w-full max-w-5xl flex-grow flex flex-col gap-6 mb-4">
+        
+        <!-- HIPPODROME TRACK SECTION -->
+        <div class="kazakh-border bg-slate-900/95 rounded-2xl p-4 shadow-xl">
+            <div class="flex justify-between items-center mb-3 px-2">
+                <h2 class="text-lg font-bold text-amber-300 flex items-center gap-2">
+                    <span>🏟️</span> Hippodrome Track <span class="text-xs text-slate-400 font-normal">(First to reach finish line wins!)</span>
+                </h2>
+                <div class="text-xs font-semibold px-3 py-1 bg-teal-900 text-teal-200 rounded-full border border-teal-500">
+                    Target: 10 Steps to Win
+                </div>
+            </div>
+
+            <!-- Racetrack Container -->
+            <div class="racetrack rounded-xl overflow-hidden shadow-inner relative py-2">
+                <div class="finish-line"></div>
+                
+                <!-- Lane 1: Team 1 -->
+                <div class="lane flex items-center px-4 relative">
+                    <div class="absolute left-3 top-1 text-xs font-bold text-teal-200 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-600 z-30">
+                        Team 1
+                    </div>
+                    <!-- Horse 1 Icon (To use a custom image, replace the emoji inside div with <img src='horse1.png' class='w-12 h-12'> -->
+                    <div id="horse1" class="horse-icon text-4xl select-none" style="left: 5%;">
+                        <div class="flex items-center bg-teal-900/90 px-3 py-1 rounded-full border-2 border-amber-400 shadow-lg">
+                            <span class="text-2xl mr-1">🐎</span>
+                            <span class="text-xs font-bold text-amber-300">T1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lane 2: Team 2 -->
+                <div class="lane flex items-center px-4 relative">
+                    <div class="absolute left-3 top-1 text-xs font-bold text-emerald-200 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-600 z-30">
+                        Team 2
+                    </div>
+                    <!-- Horse 2 Icon (To use a custom image, replace the emoji inside div with <img src='horse2.png' class='w-12 h-12'> -->
+                    <div id="horse2" class="horse-icon text-4xl select-none" style="left: 5%;">
+                        <div class="flex items-center bg-emerald-900/90 px-3 py-1 rounded-full border-2 border-amber-400 shadow-lg">
+                            <span class="text-2xl mr-1">🏇</span>
+                            <span class="text-xs font-bold text-amber-300">T2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Scores Display Bar -->
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div id="team1Card" class="bg-slate-800/90 border-2 border-teal-500 rounded-xl p-3 flex justify-between items-center transition-all duration-300">
+                    <div>
+                        <h3 class="font-bold text-teal-300 text-base md:text-lg">Team 1</h3>
+                        <p class="text-xs text-slate-300">Score / Steps: <span id="score1" class="font-bold text-amber-400 text-sm">0</span></p>
+                    </div>
+                    <div id="turnBadge1" class="hidden px-3 py-1 bg-amber-500 text-slate-950 text-xs font-black rounded-full animate-bounce">
+                        YOUR TURN
+                    </div>
+                </div>
+
+                <div id="team2Card" class="bg-slate-800/90 border-2 border-emerald-500 rounded-xl p-3 flex justify-between items-center transition-all duration-300">
+                    <div>
+                        <h3 class="font-bold text-emerald-300 text-base md:text-lg">Team 2</h3>
+                        <p class="text-xs text-slate-300">Score / Steps: <span id="score2" class="font-bold text-amber-400 text-sm">0</span></p>
+                    </div>
+                    <div id="turnBadge2" class="hidden px-3 py-1 bg-amber-500 text-slate-950 text-xs font-black rounded-full animate-bounce">
+                        YOUR TURN
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUESTION & GAMEPLAY INTERFACE -->
+        <div id="gameplaySection" class="kazakh-border bg-slate-900/95 rounded-2xl p-6 shadow-xl flex-grow flex flex-col justify-center relative">
+            
+            <!-- Turn Banner Header -->
+            <div class="text-center mb-6">
+                <span id="turnIndicator" class="px-6 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-bold rounded-full text-sm md:text-base border border-amber-400 shadow-md">
+                    Turn: Team 1
+                </span>
+            </div>
+
+            <!-- Question Box -->
+            <div id="questionContainer" class="max-w-2xl mx-auto w-full text-center">
+                <p class="text-xs uppercase tracking-widest text-amber-400 font-semibold mb-2">Find the correct Antonym (Opposite):</p>
+                <div class="bg-slate-800/90 border-2 border-amber-500/60 rounded-2xl p-6 mb-6 shadow-inner">
+                    <span id="targetWord" class="text-3xl md:text-4xl font-black text-white tracking-wide">Loading...</span>
+                </div>
+
+                <!-- Multiple Choice Options Grid -->
+                <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Options injected via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Feedback / Result Popup Notification Banner inside card -->
+            <div id="feedbackBanner" class="hidden absolute inset-0 bg-slate-950/90 rounded-2xl flex flex-col items-center justify-center z-40 transition-all p-6 text-center">
+                <div id="feedbackIcon" class="text-6xl mb-3">🎉</div>
+                <h3 id="feedbackTitle" class="text-3xl font-extrabold mb-2 text-amber-400">Correct!</h3>
+                <p id="feedbackDesc" class="text-slate-300 text-base mb-6">Team 1 moves 1 step forward!</p>
+                <button onclick="nextTurnOrQuestion()" class="kazakh-btn px-8 py-3 rounded-xl text-base shadow-lg">
+                    Next Question ➔
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- VICTORY SCREEN OVERLAY -->
+    <div id="victoryScreen" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4">
+        <div class="kazakh-border bg-slate-900 rounded-3xl p-8 max-w-lg w-full text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 text-8xl opacity-20">🏆</div>
+            <div class="text-6xl mb-4">👑</div>
+            <h2 class="text-4xl font-extrabold text-amber-400 mb-2 font-serif">VICTORY!</h2>
+            <p id="winnerText" class="text-2xl font-bold text-teal-300 mb-6">Team 1 Wins the Baige!</p>
+            <p class="text-slate-300 text-sm mb-8">Congratulations on mastering English antonyms with flying colors!</p>
+            <button onclick="resetGame()" class="kazakh-btn w-full py-4 rounded-xl text-lg shadow-xl flex items-center justify-center gap-2">
+                <span>🔄</span> Restart Baige Game
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-5xl text-center text-xs text-slate-400 py-2">
+        <p>Baige Educational Game • Designed for School Research Project • Kazakh National Aesthetics</p>
+    </footer>
+
+    <!-- JAVASCRIPT GAME ENGINE -->
+    <script>
+        /* ==========================================================================
+           VOCABULARY DATABASE (15 Antonym Pairs: 7 Adjectives, 8 Verbs)
+           ========================================================================== */
+        const rawVocabulary = [
+            // Adjectives (7 Pairs)
+            { word: "Narrow", opposite: "Wide", category: "Adjective" },
+            { word: "Wide", opposite: "Narrow", category: "Adjective" },
+            { word: "Deep", opposite: "Shallow", category: "Adjective" },
+            { word: "Shallow", opposite: "Deep", category: "Adjective" },
+            { word: "High", opposite: "Low", category: "Adjective" },
+            { word: "Low", opposite: "High", category: "Adjective" },
+            { word: "Active", opposite: "Passive", category: "Adjective" },
+            { word: "Passive", opposite: "Active", category: "Adjective" },
+            { word: "Dark", opposite: "Light", category: "Adjective" },
+            { word: "Light", opposite: "Dark", category: "Adjective" },
+            { word: "Modern", opposite: "Ancient", category: "Adjective" },
+            { word: "Ancient", opposite: "Modern", category: "Adjective" },
+            { word: "Quiet", opposite: "Noisy", category: "Adjective" },
+            { word: "Noisy", opposite: "Quiet", category: "Adjective" },
+
+            // Verbs (8 Pairs)
+            { word: "Remember", opposite: "Forget", category: "Verb" },
+            { word: "Forget", opposite: "Remember", category: "Verb" },
+            { word: "Arrive", opposite: "Depart", category: "Verb" },
+            { word: "Depart", opposite: "Arrive", category: "Verb" },
+            { word: "Win", opposite: "Lose", category: "Verb" },
+            { word: "Lose", opposite: "Win", category: "Verb" },
+            { word: "Buy", opposite: "Sell", category: "Verb" },
+            { word: "Sell", opposite: "Buy", category: "Verb" },
+            { word: "Borrow", opposite: "Lend", category: "Verb" },
+            { word: "Lend", opposite: "Borrow", category: "Verb" },
+            { word: "Appear", opposite: "Disappear", category: "Verb" },
+            { word: "Disappear", opposite: "Appear", category: "Verb" },
+            { word: "Agree", opposite: "Disagree", category: "Verb" },
+            { word: "Disagree", opposite: "Agree", category: "Verb" },
+            { word: "Praise", opposite: "Criticize", category: "Verb" },
+            { word: "Criticize", opposite: "Praise", category: "Verb" }
+        ];
+
+        // Game State Variables
+        let questionsQueue = [];
+        let currentQuestionIndex = 0;
+        let scores = { team1: 0, team2: 0 };
+        let currentTurn = 1; // 1 for Team 1, 2 for Team 2
+        let winningScore = 10;
+        let isAnswerLocked = false;
+        let audioPlaying = false;
+
+        // Helper function to shuffle arrays (Fisher-Yates)
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Initialize Game on Window Load
+        window.onload = function() {
+            resetGame();
+        };
+
+        // Reset Game function
+        function resetGame() {
+            scores = { team1: 0, team2: 0 };
+            currentTurn = 1;
+            isAnswerLocked = false;
+            questionsQueue = shuffleArray(rawVocabulary);
+            currentQuestionIndex = 0;
+
+            document.getElementById('victoryScreen').classList.add('hidden');
+            document.getElementById('feedbackBanner').classList.add('hidden');
+
+            updateUI();
+            loadNextQuestion();
+        }
+
+        // Toggle Audio Playback (Kui music placeholder)
+        function toggleAudio() {
+            const music = document.getElementById('bgMusic');
+            const btnText = document.getElementById('audioBtnText');
+            
+            if (audioPlaying) {
+                music.pause();
+                audioPlaying = false;
+                btnText.innerText = "Play Kui Music";
+            } else {
+                music.play().then(() => {
+                    audioPlaying = true;
+                    btnText.innerText = "Pause Music";
+                }).catch(e => {
+                    console.log("Audio playback note: User interaction required or file missing.", e);
+                    // Fallback visual feedback if audio file kui.mp3 is missing
+                    btnText.innerText = "Music (Kui)";
+                    audioPlaying = true;
+                });
+            }
+        }
+
+        // Load and display current question
+        function loadNextQuestion() {
+            if (currentQuestionIndex >= questionsQueue.length) {
+                // Reshuffle if we run out of questions
+                questionsQueue = shuffleArray(rawVocabulary);
+                currentQuestionIndex = 0;
+            }
+
+            const currentQ = questionsQueue[currentQuestionIndex];
+            document.getElementById('targetWord').innerText = currentQ.word;
+
+            // Generate 3 wrong distractors from other vocabulary items
+            let distractors = rawVocabulary
+                .filter(item => item.opposite !== currentQ.opposite && item.word !== currentQ.word)
+                .map(item => item.opposite);
+            
+            distractors = shuffleArray(distractors).slice(0, 3);
+
+            // Combine correct answer and distractors, then shuffle options
+            let options = shuffleArray([currentQ.opposite, ...distractors]);
+
+            // Render option buttons
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = "kazakh-btn py-4 px-6 rounded-xl text-lg md:text-xl font-bold transition-all transform hover:scale-[1.02] active:scale-95 shadow-md";
+                btn.innerText = option;
+                btn.onclick = () => submitAnswer(option, currentQ.opposite);
+                grid.appendChild(btn);
+            });
+
+            isAnswerLocked = false;
+        }
+
+        // Handle answer submission
+        function submitAnswer(selectedOption, correctOption) {
+            if (isAnswerLocked) return;
+            isAnswerLocked = true;
+
+            const isCorrect = (selectedOption === correctOption);
+            const feedbackBanner = document.getElementById('feedbackBanner');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackDesc = document.getElementById('feedbackDesc');
+
+            if (isCorrect) {
+                feedbackIcon.innerText = "🌟";
+                feedbackTitle.innerText = "Correct!";
+                feedbackTitle.className = "text-3xl font-extrabold mb-2 text-emerald-400";
+                
+                if (currentTurn === 1) {
+                    scores.team1 = Math.min(winningScore, scores.team1 + 1);
+                    feedbackDesc.innerText = `Team 1 answered correctly! Horse moves 1 step forward.`;
+                } else {
+                    scores.team2 = Math.min(winningScore, scores.team2 + 1);
+                    feedbackDesc.innerText = `Team 2 answered correctly! Horse moves 1 step forward.`;
+                }
+            } else {
+                feedbackIcon.innerText = "❌";
+                feedbackTitle.innerText = "Incorrect!";
+                feedbackTitle.className = "text-3xl font-extrabold mb-2 text-rose-500";
+                
+                if (currentTurn === 1) {
+                    scores.team1 = Math.max(0, scores.team1 - 1);
+                    feedbackDesc.innerText = `Team 1 answered incorrectly! Horse moves 1 step backward. (Min: Start line)`;
+                } else {
+                    scores.team2 = Math.max(0, scores.team2 - 1);
+                    feedbackDesc.innerText = `Team 2 answered incorrectly! Horse moves 1 step backward. (Min: Start line)`;
+                }
+            }
+
+            updateUI();
+            feedbackBanner.classList.remove('hidden');
+
+            // Check for victory condition
+            if (scores.team1 >= winningScore || scores.team2 >= winningScore) {
+                // Delay victory screen until user clicks next or auto-trigger
+                setTimeout(() => {
+                    triggerVictory(scores.team1 >= winningScore ? "Team 1" : "Team 2");
+                }, 1000);
+            }
+        }
+
+        // Proceed to next question and switch turn
+        function nextTurnOrQuestion() {
+            document.getElementById('feedbackBanner').classList.add('hidden');
+            
+            // Check if victory already triggered
+            if (scores.team1 >= winningScore || scores.team2 >= winningScore) return;
+
+            // Switch turn strictly one by one (1 -> 2 -> 1)
+            currentTurn = currentTurn === 1 ? 2 : 1;
+            currentQuestionIndex++;
+
+            updateUI();
+            loadNextQuestion();
+        }
+
+        // Update UI elements (Hippodrome horse positions, scoreboards, turn banners)
+        function updateUI() {
+            // Update scores
+            document.getElementById('score1').innerText = scores.team1;
+            document.getElementById('score2').innerText = scores.team2;
+
+            // Update horse track positions (Percentage along track: 5% to 82% max)
+            const trackSpan = 77; // Max percentage width available
+            const pos1 = 5 + (scores.team1 / winningScore) * trackSpan;
+            const pos2 = 5 + (scores.team2 / winningScore) * trackSpan;
+
+            document.getElementById('horse1').style.left = `${pos1}%`;
+            document.getElementById('horse2').style.left = `${pos2}%`;
+
+            // Update Turn Indicator and Card Highlights
+            const turnIndicator = document.getElementById('turnIndicator');
+            const card1 = document.getElementById('team1Card');
+            const card2 = document.getElementById('team2Card');
+            const badge1 = document.getElementById('turnBadge1');
+            const badge2 = document.getElementById('turnBadge2');
+
+            if (currentTurn === 1) {
+                turnIndicator.innerText = "Turn: Team 1";
+                turnIndicator.className = "px-6 py-2 bg-gradient-to-r from-teal-700 to-teal-600 text-white font-bold rounded-full text-sm md:text-base border border-amber-400 shadow-md";
+                
+                card1.classList.add('border-amber-400', 'active-team-pulse', 'bg-slate-800');
+                card1.classList.remove('border-teal-500');
+                badge1.classList.remove('hidden');
+
+                card2.classList.remove('border-amber-400', 'active-team-pulse', 'bg-slate-800');
+                card2.classList.add('border-emerald-500');
+                badge2.classList.add('hidden');
+            } else {
+                turnIndicator.innerText = "Turn: Team 2";
+                turnIndicator.className = "px-6 py-2 bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-bold rounded-full text-sm md:text-base border border-amber-400 shadow-md";
+                
+                card2.classList.add('border-amber-400', 'active-team-pulse', 'bg-slate-800');
+                card2.classList.remove('border-emerald-500');
+                badge2.classList.add('hidden');
+
+                card1.classList.remove('border-amber-400', 'active-team-pulse', 'bg-slate-800');
+                card1.classList.add('border-teal-500');
+                badge1.classList.add('hidden');
+            }
+        }
+
+        // Trigger Victory Celebration Screen
+        function triggerVictory(winningTeamName) {
+            document.getElementById('winnerText').innerText = `${winningTeamName} Wins the Baige!`;
+            document.getElementById('victoryScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenge Alu: Hobby Rider</title>
+    <!-- Tailwind CSS CDN for utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for majestic headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Kazakh National Aesthetic Theme Variables */
+        :root {
+            --color-turquoise: #008080;
+            --color-emerald: #0D5C3E;
+            --color-gold: #D4AF37;
+            --color-gold-light: #F3E5AB;
+            --color-dark-bg: #071813;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at center, #0F3528 0%, var(--color-dark-bg) 100%);
+            color: #F8FAFC;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .heading-font {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Stylized Kazakh ornamental frame simulation */
+        .kazakh-frame {
+            border: 4px solid var(--color-gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.35), inset 0 0 20px rgba(0, 128, 128, 0.4);
+            position: relative;
+            background: linear-gradient(135deg, rgba(13, 92, 62, 0.9) 0%, rgba(7, 24, 19, 0.95) 100%);
+        }
+
+        .kazakh-frame::before {
+            content: '';
+            position: absolute;
+            top: -7px; left: -7px; right: -7px; bottom: -7px;
+            border: 2px dashed rgba(212, 175, 55, 0.5);
+            pointer-events: none;
+        }
+
+        /* Gold gradient text effect */
+        .gold-gradient {
+            background: linear-gradient(180deg, #FFF3C4 0%, #D4AF37 50%, #996515 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Realistic Galloping Horse & Rider Animation Keyframes */
+        @keyframes horseGallop {
+            0% { transform: translateY(0px) rotate(0deg) scaleX(1); }
+            25% { transform: translateY(-8px) rotate(-3deg) scaleX(1.02); }
+            50% { transform: translateY(0px) rotate(0deg) scaleX(1); }
+            75% { transform: translateY(-6px) rotate(2deg) scaleX(0.98); }
+            100% { transform: translateY(0px) rotate(0deg) scaleX(1); }
+        }
+
+        .galloping-rider {
+            animation: horseGallop 0.45s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        /* Bending Down Animation when Correct Coin is Clicked */
+        @keyframes bendDown {
+            0% { transform: translateY(0) rotate(0deg); }
+            35% { transform: translateY(35px) rotate(18deg) scaleY(0.9); }
+            65% { transform: translateY(40px) rotate(22deg) scaleY(0.85); }
+            85% { transform: translateY(10px) rotate(-5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .bending-anim {
+            animation: bendDown 0.8s ease-in-out;
+        }
+
+        /* Missing Animation when Incorrect Coin is Clicked */
+        @keyframes missRide {
+            0% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-20px) rotate(-6deg); }
+            60% { transform: translateX(15px) rotate(6deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        .miss-anim {
+            animation: missRide 0.5s ease-in-out;
+        }
+
+        /* Stylized Coin Object Styling */
+        .coin-medal {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FFE57F 0%, #D4AF37 70%, #8C6200 100%);
+            border: 5px solid #FFF3C4;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 4px 10px rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coin-medal:hover {
+            transform: translateY(-8px) scale(1.06);
+            box-shadow: 0 16px 30px rgba(212, 175, 55, 0.6), inset 0 4px 15px rgba(255, 255, 255, 0.95);
+        }
+
+        .coin-medal img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #5C3A00;
+        }
+
+        /* Track line styling */
+        .track-line {
+            background: rgba(212, 175, 55, 0.15);
+            border-top: 2px dashed var(--color-gold);
+            border-bottom: 2px dashed var(--color-gold);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 md:p-6">
+
+    <!-- Header with Kazakh National Aesthetics -->
+    <header class="w-full max-w-6xl text-center py-4 mb-2 kazakh-frame rounded-2xl backdrop-blur-md">
+        <h1 class="heading-font text-3xl md:text-5xl font-black gold-gradient tracking-wider uppercase drop-shadow-lg">
+            Tenge Alu: Hobby Rider
+        </h1>
+        <p class="text-emerald-200 text-sm md:text-base mt-1 font-medium">
+            Traditional Kazakh Equine Skill Game & Educational Hobby Research Project
+        </p>
+    </header>
+
+    <!-- Background Music Audio Tag -->
+    <!-- NOTE TO DEVELOPER: Adjust 'kui3.mp3' source file path here for your background audio track -->
+    <audio id="kuiAudio" loop>
+        <source src="kui3.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-6xl flex-grow flex flex-col gap-6 justify-center">
+
+        <!-- Start Screen View -->
+        <div id="startScreen" class="w-full kazakh-frame rounded-3xl p-8 md:p-12 text-center flex flex-col items-center justify-center gap-6 shadow-2xl">
+            <div class="w-24 h-24 rounded-full bg-amber-500/20 border-4 border-amber-400 flex items-center justify-center text-4xl shadow-inner animate-pulse">
+                🏇
+            </div>
+            <h2 class="heading-font text-2xl md:text-4xl text-amber-300 font-bold">Welcome to the Traditional Arena!</h2>
+            <p class="text-emerald-100 max-w-xl text-sm md:text-base leading-relaxed">
+                Two competing teams (<span class="text-amber-300 font-semibold">Team 1</span> and <span class="text-amber-300 font-semibold">Team 2</span>) take turns reading hobby clues, locating the correct tool coin on the ground, and guiding the Kazakh batyr rider to collect the Tenge!
+            </p>
+            <div class="flex gap-4 flex-wrap justify-center mt-4">
+                <button onclick="startGame()" class="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-emerald-950 heading-font text-lg font-bold rounded-xl shadow-lg transform hover:-translate-y-1 transition duration-200 border-2 border-amber-200">
+                    Start Game
+                </button>
+                <button onclick="toggleAudio()" id="audioToggleBtn" class="px-6 py-4 bg-teal-800 hover:bg-teal-700 text-amber-300 heading-font text-sm font-bold rounded-xl shadow-lg border-2 border-amber-400/50 flex items-center gap-2">
+                    🔊 Play Kui Music
+                </button>
+            </div>
+        </div>
+
+        <!-- Gameplay Arena View (Hidden Initially) -->
+        <div id="gameScreen" class="hidden flex flex-col gap-5 w-full">
+
+            <!-- HUD & Progress Tracks -->
+            <div class="kazakh-frame rounded-2xl p-4 md:p-5 shadow-xl flex flex-col gap-3">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-3 border-b border-amber-500/30 pb-3">
+                    <div id="turnIndicator" class="heading-font text-xl md:text-2xl font-bold text-amber-300 flex items-center gap-3">
+                        <span id="teamBadge" class="px-4 py-1.5 rounded-lg bg-teal-800 border border-amber-400 text-sm">Turn: Team 1</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-emerald-200 font-semibold uppercase tracking-wider">Score — Team 1: <span id="score1" class="text-amber-400 font-bold text-base">0</span> | Team 2: <span id="score2" class="text-amber-400 font-bold text-base">0</span></span>
+                        <button onclick="restartGame()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-emerald-950 font-bold text-xs rounded-lg uppercase tracking-wider border border-amber-300 transition">
+                            Restart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Parallel Progress Tracks -->
+                <div class="flex flex-col gap-2.5 py-1">
+                    <!-- Team 1 Track -->
+                    <div class="flex items-center gap-3">
+                        <span class="w-20 text-xs font-bold text-teal-300 uppercase tracking-wide">Team 1</span>
+                        <div class="flex-grow h-8 track-line rounded-lg relative overflow-hidden flex items-center">
+                            <div id="marker1" class="absolute left-0 transition-all duration-500 flex items-center text-2xl" style="transform: translateX(0px);">
+                                🏹
+                            </div>
+                            <div class="absolute right-3 text-xs text-amber-400/80 heading-font font-bold">FINISH</div>
+                        </div>
+                    </div>
+                    <!-- Team 2 Track -->
+                    <div class="flex items-center gap-3">
+                        <span class="w-20 text-xs font-bold text-amber-300 uppercase tracking-wide">Team 2</span>
+                        <div class="flex-grow h-8 track-line rounded-lg relative overflow-hidden flex items-center">
+                            <div id="marker2" class="absolute left-0 transition-all duration-500 flex items-center text-2xl" style="transform: translateX(0px);">
+                                🐎
+                            </div>
+                            <div class="absolute right-3 text-xs text-amber-400/80 heading-font font-bold">FINISH</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP AREA: Large Prominent English Definition Banner -->
+            <div class="kazakh-frame rounded-2xl p-5 shadow-xl text-center relative overflow-hidden">
+                <div class="absolute top-2 left-3 text-[10px] tracking-widest text-amber-400/70 uppercase font-bold">Hobby Clue Banner</div>
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1 block">Read the Definition Carefully</span>
+                <p id="definitionText" class="text-emerald-50 text-base md:text-xl font-semibold leading-relaxed max-w-4xl mx-auto my-1">
+                    Loading definition...
+                </p>
+            </div>
+
+            <!-- CENTER AREA: Galloping Horse & Rider (Kazakh Batyr) -->
+            <div class="kazakh-frame rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center relative min-h-[190px]">
+                <div class="absolute top-2 left-3 text-[10px] tracking-widest text-amber-400/70 uppercase font-bold">Rider Ground Arena</div>
+                
+                <div id="riderContainer" class="my-2 transition-transform duration-300">
+                    <div class="galloping-rider text-7xl md:text-8xl drop-shadow-2xl">
+                        🏇
+                    </div>
+                    <div class="w-36 h-4 bg-black/40 rounded-full mx-auto mt-2 blur-sm"></div>
+                </div>
+                <p class="text-xs text-emerald-200 mt-1 italic">The horse gallops smoothly across the steppe path...</p>
+            </div>
+
+            <!-- COIN POSITIONING AREA: 3 Distinct Coin Objects Directly Underneath -->
+            <div class="kazakh-frame rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center relative">
+                <div class="absolute top-2 left-3 text-[10px] tracking-widest text-amber-400/70 uppercase font-bold">Tenge Ground (Select Correct Tool Coin)</div>
+                
+                <h3 class="heading-font text-amber-300 text-base md:text-lg font-bold mb-1">Click the Correct Coin Object Below</h3>
+                <p class="text-emerald-200 text-xs mb-4">Photographic representations of hobby tools (No text or names on coins)</p>
+
+                <div id="coinsContainer" class="flex flex-wrap items-center justify-center gap-6 md:gap-10 my-2">
+                    <!-- Dynamically generated coins will appear here -->
+                </div>
+
+                <div id="feedbackMessage" class="text-center text-sm md:text-base font-bold min-h-[30px] text-amber-300 tracking-wide mt-3">
+                    <!-- Dynamic feedback -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Victory Celebration Screen View (Hidden Initially) -->
+        <div id="victoryScreen" class="hidden w-full kazakh-frame rounded-3xl p-8 md:p-12 text-center flex flex-col items-center justify-center gap-6 shadow-2xl">
+            <div class="text-6xl md:text-7xl animate-bounce">🏆</div>
+            <h2 id="winnerText" class="heading-font text-3xl md:text-5xl font-black gold-gradient">Team X Wins!</h2>
+            <p class="text-emerald-100 text-base md:text-lg max-w-md">
+                Splendid horsemanship and exceptional hobby knowledge! The championship is triumphantly conquered.
+            </p>
+            <button onclick="restartGame()" class="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-emerald-950 heading-font text-lg font-bold rounded-xl shadow-lg transform hover:-translate-y-1 transition duration-200 border-2 border-amber-200">
+                Play Again
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="w-full max-w-6xl text-center py-3 text-xs text-emerald-300/80 border-t border-emerald-900 mt-4">
+        Tenge Alu: Hobby Rider &bull; School Research Educational Project &bull; Kazakh National Aesthetics
+    </footer>
+
+    <script>
+        /* 
+          Hobby Database with 8 Advanced Hobbies and 3 Distinct Definitions each.
+          Images use high-quality Unsplash photorealistic tool/item representations.
+          NOTE TO DEVELOPER: To customize image file paths or use local assets, replace the image URLs below.
+        */
+        const hobbyDatabase = [
+            {
+                name: "Photography",
+                images: [
+                    "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1500634245200-e524fc67504e?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The hobby of taking and processing photographs with a digital camera.",
+                    "The art of capturing light and moments to create realistic visual images.",
+                    "An activity focused on adjusting lenses, frames, and shutter speed to take pictures."
+                ]
+            },
+            {
+                name: "Culinary arts",
+                images: [
+                    "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1507048331197-7d4ac70b11cf?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The art and hobby of preparing, decorating, and cooking high-quality food.",
+                    "A practical hobby that involves blending ingredients and exploring unique kitchen recipes.",
+                    "The creative practice of making delicious meals using advanced cooking techniques."
+                ]
+            },
+            {
+                name: "Gardening",
+                images: [
+                    "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1592417817098-8f3d692a465b?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The activity of cultivating plants, flowers, and vegetables in an outdoor green space.",
+                    "A hobby that involves planting seeds, watering soil, and taking care of a domestic garden.",
+                    "The relaxing process of growing decorative flowers and harvesting home-grown organic crops."
+                ]
+            },
+            {
+                name: "Astronomy",
+                images: [
+                    "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1517976487504-554473859616?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The hobby of observing stars, planets, and deep space objects using a telescope.",
+                    "The scientific hobby of studying the night sky, constellations, and celestial bodies.",
+                    "An activity centered on tracking cosmic events, lunar phases, and faraway galaxies from Earth."
+                ]
+            },
+            {
+                name: "Pottery",
+                images: [
+                    "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The craft of shaping and baking raw clay into ceramic vessels and artistic pots.",
+                    "A creative hobby performed on a spinning wheel to mold mud into beautiful earthenware.",
+                    "The process of designing, glazing, and firing clay sculptures or functional dishes."
+                ]
+            },
+            {
+                name: "Model building",
+                images: [
+                    "https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The hobby of assembling small-scale replicas of historical planes, vintage cars, or military ships.",
+                    "A precise activity involving putting together miniature plastic or wooden pieces using special glue.",
+                    "The patience-testing hobby of creating accurate 3D scale models from detailed blueprints."
+                ]
+            },
+            {
+                name: "Calligraphy",
+                images: [
+                    "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The art of producing beautiful, stylized handwriting using ink and a special brush or pen.",
+                    "An elegant hobby focused on perfecting expressive and decorative lettering techniques on paper.",
+                    "The ancient practice of drawing artistic script characters with elegant visual strokes."
+                ]
+            },
+            {
+                name: "Embroidery",
+                images: [
+                    "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=400&q=80"
+                ],
+                definitions: [
+                    "The craft of decorating fabric or canvas using a sharp needle and colorful sewing threads.",
+                    "A traditional hobby of creating intricate stitched patterns, ornaments, and designs on clothes.",
+                    "The relaxing textile art that uses yarn, stitches, and round hoops to make hand-made patterns."
+                ]
+            }
+        ];
+
+        // Game State Variables
+        let currentTeam = 1;
+        let scores = { team1: 0, team2: 0 };
+        const winningScore = 5; // Track length to win
+        let currentTargetHobby = null;
+        let currentDefinition = "";
+        let isLocked = false;
+        let audioPlaying = false;
+
+        // Background Music Toggle Handler
+        function toggleAudio() {
+            const audio = document.getElementById('kuiAudio');
+            const btn = document.getElementById('audioToggleBtn');
+            if (!audioPlaying) {
+                audio.play().then(() => {
+                    audioPlaying = true;
+                    btn.textContent = "🔊 Pause Kui Music";
+                }).catch(e => {
+                    audioPlaying = true;
+                    btn.textContent = "🔊 Audio Active (Simulated)";
+                    console.warn("Audio playback note: ensure kui3.mp3 exists or browser allowed interaction.", e);
+                });
+            } else {
+                audio.pause();
+                audioPlaying = false;
+                btn.textContent = "🔊 Play Kui Music";
+            }
+        }
+
+        // Start Game
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            scores = { team1: 0, team2: 0 };
+            currentTeam = 1;
+            updateTrackPositions();
+            nextRound();
+        }
+
+        // Restart Game
+        function restartGame() {
+            document.getElementById('victoryScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            scores = { team1: 0, team2: 0 };
+            currentTeam = 1;
+            updateTrackPositions();
+            nextRound();
+        }
+
+        // Next Round Generation with Randomized Definitions and Shuffled Coins
+        function nextRound() {
+            isLocked = false;
+            document.getElementById('feedbackMessage').textContent = '';
+
+            // Update Turn UI Indicator
+            const teamBadge = document.getElementById('teamBadge');
+            if (currentTeam === 1) {
+                teamBadge.textContent = "Turn: Team 1";
+                teamBadge.className = "px-4 py-1.5 rounded-lg bg-teal-800 border border-amber-400 text-sm text-amber-300 font-bold shadow";
+            } else {
+                teamBadge.textContent = "Turn: Team 2";
+                teamBadge.className = "px-4 py-1.5 rounded-lg bg-emerald-800 border border-amber-400 text-sm text-amber-300 font-bold shadow";
+            }
+
+            // Shuffle hobby database
+            const shuffledHobbies = [...hobbyDatabase].sort(() => 0.5 - Math.random());
+            currentTargetHobby = shuffledHobbies[0];
+
+            // Pick a random definition out of the 3 available for the target hobby
+            const randomDefIndex = Math.floor(Math.random() * currentTargetHobby.definitions.length);
+            currentDefinition = currentTargetHobby.definitions[randomDefIndex];
+
+            // Select a random image variant for the target hobby
+            const targetImageIndex = Math.floor(Math.random() * currentTargetHobby.images.length);
+            const targetCoinObj = {
+                name: currentTargetHobby.name,
+                image: currentTargetHobby.images[targetImageIndex],
+                isCorrect: true
+            };
+
+            // Pick 2 distinct incorrect hobby choices
+            const incorrectHobbies = shuffledHobbies.filter(h => h.name !== currentTargetHobby.name).slice(0, 2);
+            const incorrectCoinObjs = incorrectHobbies.map(inc => {
+                const randImgIdx = Math.floor(Math.random() * inc.images.length);
+                return {
+                    name: inc.name,
+                    image: inc.images[randImgIdx],
+                    isCorrect: false
+                };
+            });
+
+            // Combine and shuffle the 3 coin choices
+            const coinChoices = [targetCoinObj, ...incorrectCoinObjs].sort(() => 0.5 - Math.random());
+
+            // Render Definition on Top Banner
+            document.getElementById('definitionText').textContent = currentDefinition;
+
+            // Render Coins on Ground (Strictly images without text or names)
+            const coinsContainer = document.getElementById('coinsContainer');
+            coinsContainer.innerHTML = '';
+
+            coinChoices.forEach(choice => {
+                const coin = document.createElement('div');
+                coin.className = 'coin-medal';
+                coin.title = "Click to pick this Tenge coin";
+                coin.onclick = () => handleCoinSelection(choice.isCorrect);
+
+                const img = document.createElement('img');
+                img.src = choice.image;
+                img.alt = "Hobby Tool";
+                img.onerror = function() {
+                    this.src = 'https://placehold.co/96x96/D4AF37/071813?text=Tool';
+                };
+
+                coin.appendChild(img);
+                coinsContainer.appendChild(coin);
+            });
+        }
+
+        // Handle Coin Click Logic and Animations
+        function handleCoinSelection(isCorrect) {
+            if (isLocked) return;
+            isLocked = true;
+
+            const riderContainer = document.getElementById('riderContainer');
+            const feedbackMsg = document.getElementById('feedbackMessage');
+
+            // Play Web Audio API sound feedback
+            playWebAudioFeedback(isCorrect);
+
+            if (isCorrect) {
+                riderContainer.classList.add('bending-anim');
+                feedbackMsg.textContent = `Correct! Team ${currentTeam} successfully collected the Tenge coin! (+1 Step)`;
+                feedbackMsg.className = "text-center text-sm md:text-base font-bold min-h-[30px] text-amber-400 tracking-wide animate-pulse";
+
+                if (currentTeam === 1) {
+                    scores.team1++;
+                } else {
+                    scores.team2++;
+                }
+            } else {
+                riderContainer.classList.add('miss-anim');
+                feedbackMsg.textContent = `Incorrect! Team ${currentTeam} missed the correct tool! (-1 Step)`;
+                feedbackMsg.className = "text-center text-sm md:text-base font-bold min-h-[30px] text-red-400 tracking-wide";
+
+                if (currentTeam === 1) {
+                    scores.team1 = Math.max(0, scores.team1 - 1);
+                } else {
+                    scores.team2 = Math.max(0, scores.team2 - 1);
+                }
+            }
+
+            updateTrackPositions();
+
+            // Check Win Condition or Switch Turn
+            setTimeout(() => {
+                riderContainer.classList.remove('bending-anim', 'miss-anim');
+
+                if (scores.team1 >= winningScore || scores.team2 >= winningScore) {
+                    triggerVictory(scores.team1 >= winningScore ? 1 : 2);
+                } else {
+                    currentTeam = currentTeam === 1 ? 2 : 1;
+                    nextRound();
+                }
+            }, 900);
+        }
+
+        // Update Track Progress Arrow Positions
+        function updateTrackPositions() {
+            const trackWidthContainer = document.querySelector('.track-line').clientWidth - 45;
+            const stepSize = trackWidthContainer / winningScore;
+
+            const pos1 = Math.min(scores.team1, winningScore) * stepSize;
+            const pos2 = Math.min(scores.team2, winningScore) * stepSize;
+
+            document.getElementById('marker1').style.transform = `translateX(${pos1}px)`;
+            document.getElementById('marker2').style.transform = `translateX(${pos2}px)`;
+
+            document.getElementById('score1').textContent = scores.team1;
+            document.getElementById('score2').textContent = scores.team2;
+        }
+
+        // Trigger Victory Screen
+        function triggerVictory(winningTeam) {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('victoryScreen').classList.remove('hidden');
+            document.getElementById('winnerText').textContent = `Team ${winningTeam} Wins the Championship!`;
+        }
+
+        // Web Audio API Sound Generator Helper
+        function playWebAudioFeedback(success) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = success ? 'sine' : 'sawtooth';
+                osc.frequency.setValueAtTime(success ? 660 : 160, ctx.currentTime);
+                if (success) {
+                    osc.frequency.exponentialRampToValueAtTime(990, ctx.currentTime + 0.18);
+                }
+
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.35);
+            } catch (e) {
+                // AudioContext restricted before gesture
+            }
+        }
+    </script>
+</body>
+</html>
